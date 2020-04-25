@@ -32,7 +32,7 @@ class CreatePlaylist:
         return response_json["id"]
 
     def get_my_songs(self):
-        """Gets songs in My Library"""
+        """Gets songs in my Library"""
 
         query = "https://api.spotify.com/v1/me/tracks"
         response = requests.get(
@@ -56,6 +56,8 @@ class CreatePlaylist:
                 self.songs_info[date_added].append(uri)
 
     def check_existing_playlists(self):
+        """Checking the existing playlists"""
+
         query = 'https://api.spotify.com/v1/me/playlists'
         response = requests.get(
             query,
@@ -72,6 +74,11 @@ class CreatePlaylist:
         return playlists
 
     def add_songs_to_existing_playlists(self, key, value, playlists):
+        """If a playlist for a certain date already exists, take a look
+        at the songs there and if there are any news songs to be added to this day,
+        add them
+        """
+
         playlist_name = 'Songs from {}'.format(key)
         playlist_id = playlists[playlist_name]
 
@@ -108,6 +115,7 @@ class CreatePlaylist:
                 )
 
     def add_songs_to_playlists(self):
+        """Adds songs to the created playlists"""
 
         self.get_my_songs()
         playlists = self.check_existing_playlists()
